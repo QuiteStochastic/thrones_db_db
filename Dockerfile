@@ -13,7 +13,7 @@ RUN apt-get -y install postgresql
 RUN update-rc.d postgresql defaults
 
 
-ADD ./src/main/resources/db/migration/ /code/data
+ADD ./db/migration/ /code/data
 
 RUN service postgresql start && \
 	sudo -u postgres psql -c "CREATE USER thrones_db_user PASSWORD 'kingsguard';" && \
@@ -73,4 +73,5 @@ RUN service postgresql start && \
 
 EXPOSE 5432
 
-CMD service postgresql start
+CMD service postgresql start && \
+	 tail -f /var/log/postgresql
