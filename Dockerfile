@@ -73,5 +73,4 @@ RUN service postgresql start && \
 
 EXPOSE 5432
 
-CMD service postgresql start && \
-	 tail -f /var/log/postgresql/postgresql-9.5-main.log
+CMD service postgresql start && tail -f /var/log/postgresql/postgresql-9.5-main.log
