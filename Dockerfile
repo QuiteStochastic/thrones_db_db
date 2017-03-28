@@ -7,7 +7,9 @@ RUN apt-get -y update && \
     apt-get -y install apt-utils
 
 RUN apt-get -y update && \
-    apt-get -y install sudo
+    apt-get -y install sudo && \
+    apt-get -y install dnsutils && \
+    apt-get -y install curl
 
 RUN apt-get -y install postgresql
 RUN update-rc.d postgresql defaults
