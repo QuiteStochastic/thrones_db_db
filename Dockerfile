@@ -7,16 +7,29 @@ RUN apt-get -y update && \
     apt-get -y install apt-utils
 
 RUN apt-get -y update && \
-    apt-get -y install sudo && \
-    apt-get -y install dnsutils && \
-    apt-get -y install curl && \
-    apt-get -y install net-tools
+    apt-get -y install sudo 
+#    apt-get -y install dnsutils && \
+#    apt-get -y install iputils-ping && \
+#    apt-get -y install curl && \
+#    apt-get -y install net-tools && \
+#    apt-get -y install netcat && \
+#    apt-get -y install vim
 
-RUN apt-get -y install postgresql
+RUN apt-get -y install postgresql-9.5
 RUN update-rc.d postgresql defaults
 
 
 ADD ./db/migration/ /code/data
+
+ADD ./postgresql.conf /etc/postgresql/9.5/main/
+ADD ./pg_hba.conf /etc/postgresql/9.5/main/
+
+
+RUN chown postgres /etc/postgresql/9.5/main/postgresql.conf && \
+    chown postgres /etc/postgresql/9.5/main/pg_hba.conf && \
+    chmod 640 /etc/postgresql/9.5/main/postgresql.conf && \
+    chmod 640 /etc/postgresql/9.5/main/pg_hba.conf
+
 
 RUN service postgresql start && \
 	sudo -u postgres psql -c "CREATE USER thrones_db_user PASSWORD 'kingsguard';" && \
@@ -69,7 +82,9 @@ RUN service postgresql start && \
     sudo -u postgres psql -d thronesdb_db -c "ALTER TABLE thrones_db_schema.visitor OWNER TO thrones_db_user;" && \
     sudo -u postgres psql -d thronesdb_db -c "COPY thrones_db_schema.visitor FROM '/code/data/visitor.csv' delimiter ',' csv;" && \
 
-    rm -rf /code/data
+    rm -rf /code/data && \
+
+    service postgresql stop
 
 	#sudo -u postgres psql -d thronesdb_db -c "insert into thrones_db_schema.episode (episodeId, name, season, episodeNumber, description) values (1,'test1-1',1,1,'describe1-1'), (2,'test1-2',1,2,'describe1-2'), (3,'test2-1',2,11,'describe2-1'), (4,'test2-2',2,12,'describe2-2');"
 
