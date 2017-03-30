@@ -3,17 +3,10 @@ RUN mkdir /code
 WORKDIR /code
 
 RUN apt-get -y update && \
-    apt-get -y upgrade && \
-    apt-get -y install apt-utils
+    apt-get -y upgrade
 
 RUN apt-get -y update && \
     apt-get -y install sudo 
-#    apt-get -y install dnsutils && \
-#    apt-get -y install iputils-ping && \
-#    apt-get -y install curl && \
-#    apt-get -y install net-tools && \
-#    apt-get -y install netcat && \
-#    apt-get -y install vim
 
 RUN apt-get -y install postgresql-9.5
 RUN update-rc.d postgresql defaults
